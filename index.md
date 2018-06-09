@@ -356,7 +356,7 @@ http://adit.io/posts/2013-06-10-three-useful-monads.html <!-- .element style="fo
 #### _(May the compiler be with you)_
 
 
-![Type First](./type_first.jpg)
+![Type First](./type_first.JPG)
 
 
 ## Typing SafeBlog
