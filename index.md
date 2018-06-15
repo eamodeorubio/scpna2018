@@ -504,9 +504,17 @@ type DoReviewUseCase = {
 ## Type the following
 
 ```javascript
+// Which are the types of 'list', 'append' and 'r'?
 const list = [1, true];
-const r = [1, true].push('hi!');
+const append = (someList, el) => {
+  /* ... */
+};
+const r = append(list, 'hi!');
 ```
+
+
+## In Scala: HList
+#### (Abreviated)
 
 
 ```scala
@@ -575,14 +583,69 @@ final case class HCons[H, T <: HList](head : H, tail : T) extends HList {
 ![Conclusion](conclusion.jpg)
 
 
-# EXTRA
+# EXTRAS
+
+
+#### Visual summary by [@Aitortxu](https://twitter.com/Aitortxu) <!-- .element: style="text-transform:none"-->
+
+![Visual summary](./aitortxu.jpg) <!-- .element: style="max-width: 800px"-->
 
 
 # GOING CRAZY WITH TYPES
 
 
 ## Type level programming
-#### _Reducing types_
+#### (A recipe)
+
+
+## Special types
+
+* `Nothing` is the empty type that has no values.
+* Literals can be considered types with only one value/instance.
+* `Unit` is an alias for the type of the empty object/tuple literal.
+
+
+## Type level functions
+
+Parametric types are actually functions that take other types as parameters and produce other types
+
+```typescript
+// 'F' receives an 'Input' type and returns a computed type
+type F<Input> = Input | string
+```
+
+
+## Basic helper predefined types
+
+* `$nameof<T>` gives the name of T
+* `$concat<A extends Literal<string>, B extends Literal<string>>` receives two literal string types and concatenates them
+
+
+
+## Type level lists
+
+* We could allow parametric functions to receive a variable list of parameters
+* And provide predefined helper types to process such list
+
+```typescript
+type SomeReducer<Result, Element> = Result | Element;
+type F<T...> = $reduce<T, SomeReducer, Nothing>
+assert F<A, B, C> is (A | B | C)
+```
+
+
+## We end up with a program run by the compiler
+
+* This program could contain type level bugs
+* For example: infinite loop -> never ending compilation
+* This program could have low readability and be hard to maintain
+* o_O
+
+
+## Meanwhile in SafeBlog...
+
+
+## Generic DRY type for Dependency Injection <!-- .element: style="text-transform: none" -->
 
 ```typescript
 type AppendDependency<D<_>, R, E> = R & {
@@ -601,8 +664,7 @@ type Parsers<Values...> = Dependencies<Parser, Values>
 ```
 
 
-## Type level programming
-#### _Mapping Types (Templates)_
+## Generic DRY UseCase type <!-- .element: style="text-transform: none" -->
 
 ```typescript
 type Request<EventRep, E...> = {
@@ -620,12 +682,4 @@ type DoReviewUseCase = UseCase<Post, Review, User, Post>
 ```
 
 
-## Who test the types?
-
-* Advanced type system are prolog like languages
-* Type definitions are programs run by the compiler
-  * Literal &amp; types are inputs to the program
-  * Readability? Type Level clean code?
-  * Slow type level programs
-  * Infinite loops
-  * Type level bugs
+## Did SafeBlog take types too far or not?
